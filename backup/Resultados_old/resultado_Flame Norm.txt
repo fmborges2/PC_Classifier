@@ -1,0 +1,39 @@
+Results for dataset:  Flame Norm
+
+Principal Curves:
+Treino ACC:     100.00
+----- teste ------
+Recall InLier.......96.35	 0.00
+Recall OutLier......92.20	 0.00
+F1-Score InLier.....92.06	 0.00
+F1-Score OutLier....94.86	 0.00
+F1-Score Model......93.81	 0.00
+ACC Model...........93.76	 0.00
+AUC Model...........97.67	 0.00
+Time................0.01	 0.00
+--------------------------------------------------
+
+Isolation Forest:
+Treino ACC:     77.14
+----- teste ------
+Recall InLier:......75.75	 0.00
+Recall OutLier:.....59.20	 0.00
+F1-Score InLier.....62.21	 0.00
+F1-Score OutLier....68.12	 0.00
+F1-Score Model......65.90	 0.00
+ACC Model:..........65.42	 0.00
+AUC Model:..........72.72	 0.00
+Time................0.11	 0.00
+--------------------------------------------------
+
+One-Class SVM:
+Treino ACC:     97.14
+----- teste ------
+Recall InLier:......97.67	 0.00
+Recall OutLier:.....81.60	 0.00
+F1-Score InLier.....85.59	 0.00
+F1-Score OutLier....89.18	 0.00
+F1-Score Model......87.83	 0.00
+ACC Model...........87.64	 0.00
+AUC Model...........91.64	 0.00
+Time................0.00	 0.00

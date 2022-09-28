@@ -1,0 +1,239 @@
+One-Class One-Class PC: k_ =  1
+Treino ACC:     93.57 4.62
+----- teste ------
+Recall InLier:     91.03 0.00
+Recall OutLier:    0.00 0.00
+F1-Score InLier:   50.98 0.00
+F1-Score OutLier:  nan nan
+F1-Score Model:    nan nan
+ACC Model:         34.21 0.00
+AUC Model:         13.70 0.00
+Time:              0.00 0.00
+
+One-Class One-Class PC: k_ =  2
+Treino ACC:     92.14 4.15
+----- teste ------
+Recall InLier:     93.36 0.00
+Recall OutLier:    2.40 0.00
+F1-Score InLier:   52.52 0.00
+F1-Score OutLier:  4.51 0.00
+F1-Score Model:    22.55 0.00
+ACC Model:         36.58 0.00
+AUC Model:         67.74 0.00
+Time:              0.00 0.00
+
+One-Class One-Class PC: k_ =  3
+Treino ACC:     92.00 4.34
+----- teste ------
+Recall InLier:     90.70 0.00
+Recall OutLier:    61.20 0.00
+F1-Score InLier:   71.09 0.00
+F1-Score OutLier:  73.38 0.00
+F1-Score Model:    72.52 0.00
+ACC Model:         72.28 0.00
+AUC Model:         88.48 0.00
+Time:              0.00 0.00
+
+One-Class One-Class PC: k_ =  4
+Treino ACC:     91.71 4.37
+----- teste ------
+Recall InLier:     91.03 0.00
+Recall OutLier:    81.80 0.00
+F1-Score InLier:   82.28 0.00
+F1-Score OutLier:  87.39 0.00
+F1-Score Model:    85.47 0.00
+ACC Model:         85.27 0.00
+AUC Model:         93.57 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  5
+Treino ACC:     91.43 4.24
+----- teste ------
+Recall InLier:     95.68 0.00
+Recall OutLier:    90.40 0.00
+F1-Score InLier:   90.42 0.00
+F1-Score OutLier:  93.68 0.00
+F1-Score Model:    92.46 0.00
+ACC Model:         92.38 0.00
+AUC Model:         96.63 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  6
+Treino ACC:     91.14 2.54
+----- teste ------
+Recall InLier:     95.02 0.00
+Recall OutLier:    92.40 0.00
+F1-Score InLier:   91.52 0.00
+F1-Score OutLier:  94.58 0.00
+F1-Score Model:    93.43 0.00
+ACC Model:         93.38 0.00
+AUC Model:         97.16 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  7
+Treino ACC:     92.00 3.39
+----- teste ------
+Recall InLier:     96.35 0.00
+Recall OutLier:    93.40 0.00
+F1-Score InLier:   92.95 0.00
+F1-Score OutLier:  95.50 0.00
+F1-Score Model:    94.54 0.00
+ACC Model:         94.51 0.00
+AUC Model:         97.72 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  8
+Treino ACC:     91.86 2.48
+----- teste ------
+Recall InLier:     97.01 0.00
+Recall OutLier:    94.20 0.00
+F1-Score InLier:   93.89 0.00
+F1-Score OutLier:  96.12 0.00
+F1-Score Model:    95.28 0.00
+ACC Model:         95.26 0.00
+AUC Model:         98.08 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  9
+Treino ACC:     92.14 3.40
+----- teste ------
+Recall InLier:     97.01 0.00
+Recall OutLier:    94.60 0.00
+F1-Score InLier:   94.19 0.00
+F1-Score OutLier:  96.33 0.00
+F1-Score Model:    95.53 0.00
+ACC Model:         95.51 0.00
+AUC Model:         98.24 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  10
+Treino ACC:     91.71 3.49
+----- teste ------
+Recall InLier:     94.35 0.00
+Recall OutLier:    93.00 0.00
+F1-Score InLier:   91.61 0.00
+F1-Score OutLier:  94.70 0.00
+F1-Score Model:    93.54 0.00
+ACC Model:         93.51 0.00
+AUC Model:         97.37 0.00
+Time:              0.02 0.00
+
+One-Class One-Class PC: k_ =  11
+Treino ACC:     92.00 3.08
+----- teste ------
+Recall InLier:     94.02 0.00
+Recall OutLier:    93.00 0.00
+F1-Score InLier:   91.44 0.00
+F1-Score OutLier:  94.61 0.00
+F1-Score Model:    93.42 0.00
+ACC Model:         93.38 0.00
+AUC Model:         97.15 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  12
+Treino ACC:     91.14 3.18
+----- teste ------
+Recall InLier:     93.36 0.00
+Recall OutLier:    93.00 0.00
+F1-Score InLier:   91.09 0.00
+F1-Score OutLier:  94.42 0.00
+F1-Score Model:    93.16 0.00
+ACC Model:         93.13 0.00
+AUC Model:         97.43 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  13
+Treino ACC:     91.43 4.04
+----- teste ------
+Recall InLier:     94.68 0.00
+Recall OutLier:    93.20 0.00
+F1-Score InLier:   91.94 0.00
+F1-Score OutLier:  94.91 0.00
+F1-Score Model:    93.79 0.00
+ACC Model:         93.76 0.00
+AUC Model:         97.52 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  14
+Treino ACC:     91.14 3.98
+----- teste ------
+Recall InLier:     94.68 0.00
+Recall OutLier:    93.20 0.00
+F1-Score InLier:   91.94 0.00
+F1-Score OutLier:  94.91 0.00
+F1-Score Model:    93.79 0.00
+ACC Model:         93.76 0.00
+AUC Model:         97.54 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  15
+Treino ACC:     90.57 3.74
+----- teste ------
+Recall InLier:     94.68 0.00
+Recall OutLier:    94.40 0.00
+F1-Score InLier:   92.83 0.00
+F1-Score OutLier:  95.55 0.00
+F1-Score Model:    94.53 0.00
+ACC Model:         94.51 0.00
+AUC Model:         97.49 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  16
+Treino ACC:     90.14 3.35
+----- teste ------
+Recall InLier:     94.02 0.00
+Recall OutLier:    92.60 0.00
+F1-Score InLier:   91.14 0.00
+F1-Score OutLier:  94.39 0.00
+F1-Score Model:    93.17 0.00
+ACC Model:         93.13 0.00
+AUC Model:         97.24 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  17
+Treino ACC:     90.71 4.44
+----- teste ------
+Recall InLier:     94.02 0.00
+Recall OutLier:    83.00 0.00
+F1-Score InLier:   84.60 0.00
+F1-Score OutLier:  88.96 0.00
+F1-Score Model:    87.32 0.00
+ACC Model:         87.14 0.00
+AUC Model:         92.65 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  18
+Treino ACC:     89.57 4.14
+----- teste ------
+Recall InLier:     93.36 0.00
+Recall OutLier:    91.40 0.00
+F1-Score InLier:   89.92 0.00
+F1-Score OutLier:  93.55 0.00
+F1-Score Model:    92.19 0.00
+ACC Model:         92.13 0.00
+AUC Model:         96.24 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  19
+Treino ACC:     89.86 4.06
+----- teste ------
+Recall InLier:     93.69 0.00
+Recall OutLier:    92.60 0.00
+F1-Score InLier:   90.97 0.00
+F1-Score OutLier:  94.30 0.00
+F1-Score Model:    93.05 0.00
+ACC Model:         93.01 0.00
+AUC Model:         96.39 0.00
+Time:              0.01 0.00
+
+One-Class One-Class PC: k_ =  20
+Treino ACC:     89.57 3.89
+----- teste ------
+Recall InLier:     94.02 0.00
+Recall OutLier:    91.20 0.00
+F1-Score InLier:   90.13 0.00
+F1-Score OutLier:  93.63 0.00
+F1-Score Model:    92.32 0.00
+ACC Model:         92.26 0.00
+AUC Model:         95.39 0.00
+Time:              0.01 0.00

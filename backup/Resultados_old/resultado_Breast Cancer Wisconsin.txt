@@ -1,0 +1,39 @@
+Results for dataset:  Breast Cancer Wisconsin
+
+Principal Curves:
+Treino ACC:     100.00
+----- teste ------
+Recall InLier.......88.81	 0.00
+Recall OutLier......99.16	 0.00
+F1-Score InLier.....93.33	 0.00
+F1-Score OutLier....96.54	 0.00
+F1-Score Model......95.39	 0.00
+ACC Model...........95.44	 0.00
+AUC Model...........96.90	 0.00
+Time................0.01	 0.00
+--------------------------------------------------
+
+Isolation Forest:
+Treino ACC:     96.77
+----- teste ------
+Recall InLier:......84.33	 0.00
+Recall OutLier:.....100.00	 0.00
+F1-Score InLier.....91.50	 0.00
+F1-Score OutLier....95.79	 0.00
+F1-Score Model......94.25	 0.00
+ACC Model:..........94.37	 0.00
+AUC Model:..........97.92	 0.00
+Time................0.08	 0.00
+--------------------------------------------------
+
+One-Class SVM:
+Treino ACC:     93.55
+----- teste ------
+Recall InLier:......76.12	 0.00
+Recall OutLier:.....100.00	 0.00
+F1-Score InLier.....86.44	 0.00
+F1-Score OutLier....93.73	 0.00
+F1-Score Model......91.11	 0.00
+ACC Model...........91.42	 0.00
+AUC Model...........96.49	 0.00
+Time................0.00	 0.00

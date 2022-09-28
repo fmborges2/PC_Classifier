@@ -1,0 +1,39 @@
+Results for dataset:  Flame Data
+
+Principal Curves:
+Treino ACC:     98.57
+----- teste ------
+Recall InLier.......97.01	 0.00
+Recall OutLier......90.00	 0.00
+F1-Score InLier.....90.82	 0.00
+F1-Score OutLier....93.85	 0.00
+F1-Score Model......92.71	 0.00
+ACC Model...........92.63	 0.00
+AUC Model...........97.45	 0.00
+Time................0.01	 0.00
+--------------------------------------------------
+
+Isolation Forest:
+Treino ACC:     84.29
+----- teste ------
+Recall InLier:......79.73	 0.00
+Recall OutLier:.....48.80	 0.00
+F1-Score InLier.....60.23	 0.00
+F1-Score OutLier....60.62	 0.00
+F1-Score Model......60.47	 0.00
+ACC Model:..........60.42	 0.00
+AUC Model:..........69.86	 0.00
+Time................0.07	 0.00
+--------------------------------------------------
+
+One-Class SVM:
+Treino ACC:     97.14
+----- teste ------
+Recall InLier:......94.68	 0.00
+Recall OutLier:.....85.00	 0.00
+F1-Score InLier.....86.23	 0.00
+F1-Score OutLier....90.33	 0.00
+F1-Score Model......88.79	 0.00
+ACC Model...........88.64	 0.00
+AUC Model...........93.01	 0.00
+Time................0.00	 0.00

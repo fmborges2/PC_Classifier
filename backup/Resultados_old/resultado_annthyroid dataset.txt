@@ -1,0 +1,39 @@
+Results for dataset:  annthyroid dataset
+
+Principal Curves:
+Treino ACC:     90.79
+----- teste ------
+Recall InLier.......88.45	 0.00
+Recall OutLier......71.91	 0.00
+F1-Score InLier.....90.28	 0.00
+F1-Score OutLier....66.84	 0.00
+F1-Score Model......85.34	 0.00
+ACC Model...........84.96	 0.00
+AUC Model...........91.24	 0.00
+Time................0.06	 0.00
+--------------------------------------------------
+
+Isolation Forest:
+Treino ACC:     86.94
+----- teste ------
+Recall InLier:......85.95	 0.00
+Recall OutLier:.....74.53	 0.00
+F1-Score InLier.....89.18	 0.00
+F1-Score OutLier....65.62	 0.00
+F1-Score Model......84.22	 0.00
+ACC Model:..........83.54	 0.00
+AUC Model:..........90.52	 0.00
+Time................0.09	 0.00
+--------------------------------------------------
+
+One-Class SVM:
+Treino ACC:     82.66
+----- teste ------
+Recall InLier:......80.45	 0.00
+Recall OutLier:.....77.15	 0.00
+F1-Score InLier.....86.25	 0.00
+F1-Score OutLier....61.63	 0.00
+F1-Score Model......81.06	 0.00
+ACC Model...........79.76	 0.00
+AUC Model...........87.95	 0.00
+Time................0.06	 0.00

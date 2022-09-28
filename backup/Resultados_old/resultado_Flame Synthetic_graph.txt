@@ -1,0 +1,39 @@
+Results for dataset:  Flame Synthetic_graph
+
+Principal Curves:
+Treino ACC:     100.00
+----- teste ------
+Recall InLier.......99.17	 0.00
+Recall OutLier......99.20	 0.00
+F1-Score InLier.....99.25	 0.00
+F1-Score OutLier....99.10	 0.00
+F1-Score Model......99.18	 0.00
+ACC Model...........99.18	 0.00
+AUC Model...........99.47	 0.00
+Time................0.01	 0.00
+--------------------------------------------------
+
+Isolation Forest:
+Treino ACC:     87.14
+----- teste ------
+Recall InLier:......83.86	 0.00
+Recall OutLier:.....87.40	 0.00
+F1-Score InLier.....86.30	 0.00
+F1-Score OutLier....84.53	 0.00
+F1-Score Model......85.50	 0.00
+ACC Model:..........85.47	 0.00
+AUC Model:..........91.42	 0.00
+Time................0.05	 0.00
+--------------------------------------------------
+
+One-Class SVM:
+Treino ACC:     100.00
+----- teste ------
+Recall InLier:......99.17	 0.00
+Recall OutLier:.....98.20	 0.00
+F1-Score InLier.....98.84	 0.00
+F1-Score OutLier....98.59	 0.00
+F1-Score Model......98.73	 0.00
+ACC Model...........98.73	 0.00
+AUC Model...........99.41	 0.00
+Time................0.00	 0.00

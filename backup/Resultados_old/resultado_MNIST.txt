@@ -1,0 +1,39 @@
+Results for dataset:  MNIST
+
+Principal Curves:
+Treino ACC:     88.82
+----- teste ------
+Recall InLier.......88.07	 0.00
+Recall OutLier......83.29	 0.00
+F1-Score InLier.....90.93	 0.00
+F1-Score OutLier....76.21	 0.00
+F1-Score Model......87.21	 0.00
+ACC Model...........86.86	 0.00
+AUC Model...........92.56	 0.00
+Time................1.15	 0.00
+--------------------------------------------------
+
+Isolation Forest:
+Treino ACC:     80.75
+----- teste ------
+Recall InLier:......79.43	 0.00
+Recall OutLier:.....75.00	 0.00
+F1-Score InLier.....84.55	 0.00
+F1-Score OutLier....63.60	 0.00
+F1-Score Model......79.26	 0.00
+ACC Model:..........78.31	 0.00
+AUC Model:..........85.45	 0.00
+Time................0.61	 0.00
+--------------------------------------------------
+
+One-Class SVM:
+Treino ACC:     85.30
+----- teste ------
+Recall InLier:......79.82	 0.00
+Recall OutLier:.....86.43	 0.00
+F1-Score InLier.....86.57	 0.00
+F1-Score OutLier....70.23	 0.00
+F1-Score Model......82.44	 0.00
+ACC Model...........81.49	 0.00
+AUC Model...........90.13	 0.00
+Time................0.37	 0.00
