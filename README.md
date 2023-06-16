@@ -3,7 +3,6 @@ Principal Curves based classifier in two versios: unsupervised (One-Class) and S
 
 This algorithm is free for use. 
 
-When the algorithm use, we ask to reference our research paper about: doi.org/10.1007/s00521-023-08721-8
+When the algorithm use, we ask to reference our research paper about:
 
-Borges, F.E.M., Mota, O.F., Ferreira, D.D., Barbosa, B.H.G. One-Class Classifier Based on Principal
-Curves. Neural Computing and Applications, Springer. 2023.
+de Melo Borges, F.E., Mota, O.F., Ferreira, D.D. et al. One-class classifier based on principal curves. Neural Comput & Applic (2023). https://doi.org/10.1007/s00521-023-08721-8
