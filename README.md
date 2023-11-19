@@ -10,4 +10,4 @@ pip install kseg-py
 
 The pip's link is https://pypi.org/project/kseg-py/
 
-The example archive shows the operation of the module in its 3 different applications.
+The example file shows the operation of the module in its 3 different applications.
