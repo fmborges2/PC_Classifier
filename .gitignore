@@ -7,4 +7,3 @@ kseg_py/backup
 #ignorando cache
 kseg_py/__pycache__
 
-.gitignore
