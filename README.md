@@ -6,3 +6,7 @@ de Melo Borges, F.E., Mota, O.F., Ferreira, D.D. et al. One-class classifier bas
 
 This current version includes the pip repo, you can install the module using the pip command:
 pip install kseg-py
+
+The link of the pip is: https://pypi.org/project/kseg-py/
+
+
