@@ -1,0 +1,5 @@
+#ignorando ambiente
+venv
+
+#ignorando pasta backup
+kseg_py/backup
