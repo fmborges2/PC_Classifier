@@ -1,0 +1,10 @@
+LICENCE
+README.md
+setup.py
+ocpc_py/Models.py
+ocpc_py/__init__.py
+ocpc_py.egg-info/PKG-INFO
+ocpc_py.egg-info/SOURCES.txt
+ocpc_py.egg-info/dependency_links.txt
+ocpc_py.egg-info/requires.txt
+ocpc_py.egg-info/top_level.txt

@@ -2,11 +2,14 @@
 venv
 
 #ignorando pasta backup
-kseg_py/backup
+ocpc_pypy/backup
 
 #ignorando cache
-kseg_py/__pycache__
+ocpc_py/__pycache__
 
 #ignorando pasta dist
 dist
 kseg_py.egg-info
+
+#ignorando requirements para ambiente
+requirements.txt
