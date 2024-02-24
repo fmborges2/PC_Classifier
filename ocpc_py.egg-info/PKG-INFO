@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: ocpc-py
-Version: 0.1.0
+Version: 0.1.1
 Summary: One Class Classifier based on Principal Curves in Python
 Home-page: https://github.com/fmborges2/PC_Classifier/
 Author: Fernando Elias de Melo Borges
@@ -12,8 +12,8 @@ License-File: LICENCE
 Requires-Dist: numpy
 Requires-Dist: matplotlib
 
-# KsegClassifier
-Principal Curves based classifier in two versios: One-Class and MultiClass.
+# OCPC Classifier
+Principal Curves based Classifier in two versios: One-Class and MultiClass.
 This algorithm is free for use (MIT Licence)
 Please refer to our research paper: " de Melo Borges, F.E., Mota, O.F., Ferreira, D.D. et al. One-class classifier based on principal curves. Neural Comput & Applic (2023). https://doi.org/10.1007/s00521-023-08721-8 "
 when you use this algorithm.
@@ -25,3 +25,4 @@ pip install kseg-py
 The pip's link is https://pypi.org/project/kseg-py/
 
 The example file shows the operation of the module in its 3 different applications.
+

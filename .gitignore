@@ -13,3 +13,6 @@ kseg_py.egg-info
 
 #ignorando requirements para ambiente
 requirements.txt
+
+#ignorar pasta de testes
+testes

@@ -6,8 +6,9 @@ when you use this algorithm.
 
 This current version includes the pip repo, you can install the module using the pip command:
 
-pip install kseg-py
+pip install ocpc-py
 
-The pip's link is https://pypi.org/project/kseg-py/
+The pip's link is https://pypi.org/project/ocpc-py/
 
 The example file shows the operation of the module in its 3 different applications.
+
