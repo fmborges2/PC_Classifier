@@ -576,7 +576,7 @@ class Kseg:
         vertices = np.reshape(lines[:,:,0:k], (X.shape[1], 2*k), order='F')
         y, sqd = map_to_arcl(copy(edges), copy(vertices), X)
         
-        of = np.array([np.mean(sqd), np.log(np.max(y[:,0]))])
+        # of = np.array([np.mean(sqd), np.log(np.max(y[:,0]))])
         
         while k<self.k_max:
             
@@ -785,54 +785,98 @@ class MultiClassPC:
 
 
     def fit(self, X, Y):
-        nclasses = Y.shape[1]
-        j = 0
-        curves = []
-        
-        while j < nclasses:
-            cont = 0
-            for i in range(len(X)):
-                if Y[i,j] == 1:
-                    cont = cont+1
+        uu = Y.shape
+        if len(uu) == 1:
+            nclasses = len(np.unique(Y))
+            curves = []
+            class_values = np.unique(Y)
+            self.type_ = '1d'
             
-            x = np.zeros((cont, X.shape[1]))
-            u = 0
-            for i in range(len(X)):
-                if Y[i,j] == 1:
-                    x[u, :] = X[i,:]
-                    u = u+1
+            for j in range(nclasses):                
+                x = X[Y == class_values[j]]                
+                curve = Kseg(self.k_max, self.alfa, self.lamda, self.buffer).fitCurve(x)
+                # e_nome = e_nome + str(j)
+                # v_nome = v_nome + str(j)
+                # parametros[e_nome] = e
+                # parametros[v_nome] = v
+                curves.append(curve)
+                del curve
+            #end fit
+            self.class_labels = class_values
+            self.nclasses = nclasses
+            self.curves = curves
+            return self
             
-            j = j+1
-            curve = Kseg(self.k_max, self.alfa, self.lamda, self.buffer).fitCurve(x)
-            # e_nome = e_nome + str(j)
-            # v_nome = v_nome + str(j)
-            # parametros[e_nome] = e
-            # parametros[v_nome] = v
-            curves.append(curve)
-            del curve
-        #end fit
-        self.nclasses = nclasses
-        self.curves = curves
-        return self
+        #
+        else:
+            nclasses = Y.shape[1]
+            self.type_ = 'nd'
+            
+            j = 0
+            curves = []
+            while j < nclasses:
+                cont = 0
+                for i in range(len(X)):
+                    if Y[i,j] == 1:
+                        cont = cont+1
+                
+                x = np.zeros((cont, X.shape[1]))
+                u = 0
+                for i in range(len(X)):
+                    if Y[i,j] == 1:
+                        x[u, :] = X[i,:]
+                        u = u+1
+                
+                j = j+1
+                curve = Kseg(self.k_max, self.alfa, self.lamda, self.buffer).fitCurve(x)
+                # e_nome = e_nome + str(j)
+                # v_nome = v_nome + str(j)
+                # parametros[e_nome] = e
+                # parametros[v_nome] = v
+                curves.append(curve)
+                del curve
+            #end fit
+            self.nclasses = nclasses
+            self.curves = curves
+            return self
     ##
     
     def predict(self, X):
-        d = np.zeros((X.shape[0], self.nclasses))
-        y = np.zeros((X.shape[0], self.nclasses))
+
         
-        i = 0
-        for curve in self.curves:          
-            aux, d[:,i] = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
-            i+=1
-        #end mapping
-        uu = np.argmin(d, axis = 1)
-        
-        for i in range(len(y)):
-            y[i, uu[i]] = 1
-        #end predict
-        
-        return y
-    ##
+        if self.type_ == '1d':
+            d = np.zeros((X.shape[0], self.nclasses))
+            y = np.zeros(X.shape[0])
+            i = 0
+            for curve in self.curves:          
+                aux, d[:,i] = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
+                i+=1
+            #end mapping
+            
+            uu = np.argmin(d, axis = 1)
+            
+            for i in range(0, len(self.class_labels)):
+                indices = np.where(uu == i)[0]
+                y[indices] = self.class_labels[i]
+            #
+            return y
+        #
+        else:
+            d = np.zeros((X.shape[0], self.nclasses))
+            y = np.zeros((X.shape[0], self.nclasses))
+            i = 0
+            for curve in self.curves:          
+                aux, d[:,i] = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
+                i+=1
+            #end mapping
+            uu = np.argmin(d, axis = 1)
+            
+            for i in range(len(y)):
+                y[i, uu[i]] = 1
+            #end predict
+            
+            return y
+        ##
     
     def score(self, y, yp):
         #calculo da taxa de acerto do classificador
@@ -860,4 +904,28 @@ class MultiClassPC:
         acc = np.sum(acc)/np.sum(N)
         return np.mean(acc)
     ##
+    
+    def predict_proba(self, X):
+        d = np.zeros((X.shape[0], self.nclasses))
+        probas = np.zeros((X.shape[0], self.nclasses))
+        
+        i = 0
+        for curve in self.curves:          
+            aux, d[:,i] = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
+            i+=1
+        ##
+        
+        for i in range(len(probas)):
+            aux = np.sum(1/(d[i,:]))
+            # probas[i, :] = (d[i, :] / total_dists[i])
+            probas[i,:] = (1/d[i,:]) / aux
+            # print('----------', i)
+            # print(d[i, :])
+            # print(aux)
+            # print(probas[i,:])
+            # print(np.sum(probas[i,:]))
+        #end predict
+        
+        return probas
+        
 ##

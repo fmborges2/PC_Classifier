@@ -6,6 +6,7 @@ ocpc_pypy/backup
 
 #ignorando cache
 ocpc_py/__pycache__
+ocpc_py/teste.py
 
 #ignorando pasta dist
 dist
