@@ -7,7 +7,6 @@ Created on Thu Aug 22 16:10:04 2019
 
 # Função k-seg
 import numpy as np
-import numpy.matlib
 import numpy.linalg as la
 from copy import copy
 import matplotlib.pyplot as plt
@@ -19,7 +18,7 @@ def findIndeces(X: np.ndarray,
                 buffer: int):
     if X.shape[0] < buffer:
         pwdists = sqdist(X.T, X.T)
-        dcp = np.maximum((np.matlib.repmat(d.reshape((d.shape[0], 1)), 1, X.shape[0]) - pwdists), 0)
+        dcp = np.maximum((np.tile(d.reshape((d.shape[0], 1)), (1, X.shape[0]))- pwdists), 0)
         vr_size = np.sum(np.minimum(dcp, eps) / eps, axis=0)
         vr_ns = np.minimum(np.maximum(vr_size, 2), 3) - 2
         delta = vr_ns * (np.sum(dcp, axis=0))
@@ -38,35 +37,28 @@ def findIndeces(X: np.ndarray,
             fim = int((i + 1) * buffer)
 
             pwdists = sqdist(X[inicio:fim, :].T, X[inicio:fim, :].T)
-            dcp = np.maximum((np.matlib.repmat(d[inicio:fim].reshape((buffer, 1)), 1, buffer) - pwdists), 0)
+            dcp = np.maximum((np.tile(d[inicio:fim].reshape((buffer, 1)), (1, buffer)) - pwdists), 0)
             vr_size = np.sum(np.minimum(dcp[inicio:fim, :], eps) / eps, axis=0)
             vr_ns = np.minimum(np.maximum(vr_size, 2), 3) - 2
             delta = vr_ns * (np.sum(dcp, axis=0))
-            # t = np.max(delta)
             i = np.argmax(delta)
             ind = np.where((dcp[:, i]) > 0)[0]
-            # ind = ind[0]
             indeces = np.append(indeces, ind, axis=0)
-        # end for
 
-        if (resto > 0):
+        if resto > 0:
             inicio = fim
             fim = X.shape[0]
 
             pwdists = sqdist(X[inicio:fim, :].T, X[inicio:fim, :].T)
-            dcp = np.maximum((np.matlib.repmat(d[inicio:fim].reshape((resto, 1)), 1, resto) - pwdists), 0)
+            dcp = np.maximum((np.tile(d[inicio:fim].reshape((resto, 1)), (1, resto)) - pwdists), 0)
             vr_size = np.sum(np.minimum(dcp[inicio:fim, :], eps) / eps, axis=0)
             vr_ns = np.minimum(np.maximum(vr_size, 2), 3) - 2
             delta = vr_ns * (np.sum(dcp, axis=0))
-            # t = np.max(delta)
             i = np.argmax(delta)
             ind = np.where((dcp[:, i]) > 0)[0]
-            # ind = ind[0]
             indeces = np.append(indeces, ind, axis=0)
-            # end if
 
         return indeces
-
 
 '''funções do kseg'''
 ''' Fase Operacional -> Mapeamento Distancias'''
@@ -77,7 +69,7 @@ def sqdist(a: np.ndarray, b: np.ndarray):
     bb = np.sum((b * b), axis=0)
     ab = np.dot(a.T, b)
     c = aa.reshape((aa.shape[0], 1))
-    d = np.abs(np.matlib.repmat(c, 1, bb.shape[0]) + np.matlib.repmat(bb, aa.shape[0], 1) - 2 * ab)
+    d = np.abs(np.tile(c, (1, bb.shape[0])) + np.tile(bb, (aa.shape[0], 1)) - 2 * ab)
     return d
 
 
@@ -85,12 +77,12 @@ def seg_dist(v1: np.ndarray, v2: np.ndarray, x: np.ndarray):
     a = 0
     b = np.linalg.norm(v2 - v1)
     u = (v2 - v1) / np.linalg.norm(b)
-    t = np.dot((x.T - np.matlib.repmat(v1.T, x.shape[1], 1)), u)
+    t = np.dot((x.T - np.tile(v1.T, (x.shape[1], 1))), u)
     t = np.maximum(t, a)
     t = np.minimum(t, b)
     t = np.reshape(t, (len(t), 1))
     u = np.reshape(u, (len(u), 1))
-    p = np.matlib.repmat(v1.T, x.shape[1], 1) + np.dot(t, u.T)
+    p = np.tile(v1.T, (x.shape[1], 1)) + np.dot(t, u.T)
     d = (x.T - p)
     d = d * d
     d = np.sum(d, axis=1)
@@ -98,7 +90,6 @@ def seg_dist(v1: np.ndarray, v2: np.ndarray, x: np.ndarray):
 
 
 '''Fase Desenvolvimento -> Construção e Otimização da CP'''
-
 
 def hoek(v1, v2):
     v1 = v1 / np.linalg.norm(v1)
@@ -117,15 +108,13 @@ def hoek2(X: np.ndarray, Y: np.ndarray):
 
     return a
 
-
 def convertFlip(uu):
-    # tt = uu.shape
+
     if len(uu.shape) == 1:
         uu = uu.reshape(1, uu.shape[0], order='F')
 
     vv = np.fliplr(uu)
     return vv
-
 
 def construct_hp(temps: np.ndarray, lamda: float):
     s = np.zeros((temps.shape[0], 4, temps.shape[2]))
@@ -207,7 +196,6 @@ def construct_hp(temps: np.ndarray, lamda: float):
             p[s1, pl[s1][0]:pl[s1][0] + pl[s2][0], 0] = convertFlip(p[s2, 0:pl[s2][0], 0])
             p[s1, pl[s1][0]:pl[s1][0] + pl[s2][0], 1] = convertFlip(p[s2, 0:pl[s2][0], 1])
             del uu, pp
-
 
         elif i == 2:
 
@@ -314,9 +302,7 @@ def optim_hp(e: np.ndarray, c: np.ndarray):
             a2 = 1
 
         flipped = 0
-        ok = False
 
-        # while (not ok):
         while True:
             b1 = np.where(edges[:, a1] == 1)
             b1 = b1[0]
@@ -434,7 +420,6 @@ def map_to_arcl(edges: np.ndarray, vertices: np.ndarray, x: np.ndarray):
             j = j[0][0]
 
     y = np.zeros((n, D + 1))
-    # msqd = 0
     dists = np.zeros((n, segments.shape[2]))
     rest = np.zeros((n, D + 1, segments.shape[2]))
 
@@ -456,9 +441,9 @@ def map_to_arcl(edges: np.ndarray, vertices: np.ndarray, x: np.ndarray):
 
 
 def plot_curve(e, v, ax):
-    ws = 5;
+    ws = 5
     Cs = 'k'
-    wi = 2;
+    wi = 2
     Ci = 'k'
 
     key_s = True
@@ -544,7 +529,7 @@ class Kseg:
 
             cent = np.mean(XS, axis=0)
 
-            l, v = la.eigh(np.cov(np.transpose((XS - np.matlib.repmat(cent, XS.shape[0], 1)))), 'U')
+            l, v = la.eigh(np.cov(np.transpose((XS - np.tile(cent, (XS.shape[0], 1))))), 'U')
             m = np.argmax(l)
             l = np.max(l)
             a = cent.T - v[:, m] * f * np.sqrt(l)
@@ -581,7 +566,7 @@ class Kseg:
                             XS[j, :] = X[indeces[j], :]
 
                         cent = np.mean(XS, axis=0)
-                        vals, v = la.eigh(np.cov(np.transpose((XS - np.matlib.repmat(cent, XS.shape[0], 1)))), 'U')
+                        vals, v = la.eigh(np.cov(np.transpose((XS - np.tile(cent, (XS.shape[0], 1))))), 'U')
                         l = np.max(vals)
                         m = np.argmax(vals)
                         spread = f * np.sqrt(l)
@@ -626,9 +611,9 @@ class Kseg:
         e = copy(self.edges)
         v = copy(self.vertices)
 
-        ws = 5;
+        ws = 5
         Cs = 'k'
-        wi = 2;
+        wi = 2
         Ci = 'k'
 
         key_s = True
@@ -689,7 +674,6 @@ class OneClassPC:
         self.limiar = limiar
         return self
 
-    ##
 
     def predict(self, X: np.ndarray):
 
@@ -759,10 +743,9 @@ class MultiClassPC:
         if self.type_ == '1d':
             d = np.zeros((X.shape[0], self.nclasses))
             y = np.zeros(X.shape[0])
-            # i = 0
+
             for i, curve in enumerate(self.curves):
                 aux, d[:, i] = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
-                # i+=1
 
             uu = np.argmin(d, axis=1)
 
@@ -774,10 +757,10 @@ class MultiClassPC:
         else:
             d = np.zeros((X.shape[0], self.nclasses))
             y = np.zeros((X.shape[0], self.nclasses))
-            # i = 0
+
             for i, curve in enumerate(self.curves):
                 aux, d[:, i] = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
-                # i+=1
+
             uu = np.argmin(d, axis=1)
 
             for i in range(len(y)):
