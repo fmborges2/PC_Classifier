@@ -14,6 +14,17 @@ import matplotlib.pyplot as plt
 
 
 def findIndeces(X, eps, d, buffer):
+    #Function to use batch processing in the find the distances
+    #This method is important to apply to reduces the memory consumption
+    #Is used for find indeces for the Voronoi Regions  
+    #parameters:
+        #X: input data
+        #eps: tolerance value
+        #d: distances vector
+        #buffer: batch size
+    #outputs:
+        #indeces: Voronoi regions indeces
+    
     if(X.shape[0] < buffer):
         pwdists = sqdist(X.T, X.T)
         dcp = np.maximum((np.matlib.repmat(d.reshape((d.shape[0], 1)), 1, X.shape[0]) - pwdists), 0)
@@ -65,22 +76,39 @@ def findIndeces(X, eps, d, buffer):
         #end if
         
         return indeces
-        
+#end
 
-'''funções do kseg'''
-''' Fase Operacional -> Mapeamento Distancias'''
+'''Kseg Functions'''
+'''Operational phase -> distance mapping'''
 
 def sqdist(a,b):
+    #Calculate the squared distance between 2 points
+    #parameters:
+        #a: first point 
+        #b: second point
+    #outputs:
+        #d: squared (euclidean) distance
+    
     aa = np.sum((a**2),axis=0)
     bb = np.sum((b*b),axis=0)
     ab = np.dot((a.T),b)
     c  = aa.reshape((aa.shape[0],1))
     d = np.abs(np.matlib.repmat(c, 1, bb.shape[0])+np.matlib.repmat(bb,aa.shape[0],1) -2*ab)
     return d
-
+#end
 
 
 def seg_dist(v1, v2, x):
+    #Calculate the distance between a segment and data
+    #parameters:
+        #v1: start vertex
+        #v2: end vertex
+        #x: input data
+    #outputs:
+        #d: distances between segment and data
+        #t: projection index
+        #p: projected data points on the curve
+    
     a = 0
     b = np.linalg.norm(v2-v1)
     u = (v2-v1)/np.linalg.norm(b)
@@ -94,19 +122,31 @@ def seg_dist(v1, v2, x):
     d = d*d
     d = np.sum(d, axis = 1)
     return d, t, p
-
+#end
 
 '''Fase Desenvolvimento -> Construção e Otimização da CP'''
+'''Development curve phase -> Construction and optimization of PC'''
 
 def hoek(v1, v2):
+    #compute angle between 2 vertices
+    #parameters:
+        #v1: first vertex
+        #v2: second vertex
+    #outputs:
+        #h: angle between the vertices
+    
     v1 = v1/np.linalg.norm(v1)
     v2 = v2/np.linalg.norm(v2)
     prod = np.dot(v1.T, v2)
     h = np.arccos(prod)/(np.pi)
     return h
-
+#end
 
 def hoek2(X, Y):
+    #compute angle between segments X & S and S & Y
+    #where S is the segment connecting X and Y 
+    #both X and Y are 2x4 matrices with endpoints in columns
+    
     a = np.zeros((2,2))
     a[0,0] = hoek((X[:,0]-X[:,1]), (Y[:,0]-X[:,0])) + hoek((Y[:,0]-X[:,0]), (Y[:,1]-Y[:,0]))
     a[0,1] = hoek((X[:,0]-X[:,1]), (Y[:,2]-X[:,0])) + hoek((Y[:,2]-X[:,0]), (Y[:,3]-Y[:,2]))
@@ -114,20 +154,31 @@ def hoek2(X, Y):
     a[1,1] = hoek((X[:,2]-X[:,3]), (Y[:,2]-X[:,2])) + hoek((Y[:,2]-X[:,2]), (Y[:,3]-Y[:,2]))
     
     return a
-
+#end
 
 def convertFlip(uu):
+    #adaptation for the original matlab algorithm, to incoporate the same vector structure
+    
     tt = uu.shape
     if len(tt) == 1:
         uu = uu.reshape(1,uu.shape[0], order = 'F')
     
     vv = np.fliplr(uu)
     return vv
-
+#end
 
 
 
 def construct_hp(temps, lamda):
+    #Function to construt new segment and reorganize the segments in the edges matrix 
+    #parameters:
+        #temps: current segments in the PC
+        #lamda: parameter of softness
+    #outputs:
+        #edges: matrix that indicates the vertices connection
+        #costs: loss for optimization
+    
+    
     s = np.zeros((temps.shape[0], 4, temps.shape[2]))
     s[:,0:2,:] = temps
     s[:,2,:] = temps[:,1,:]
@@ -315,10 +366,17 @@ def construct_hp(temps, lamda):
         edges[p[0,knoop+1,kant]+2*(p[0,knoop+1,kernel]),p[0,knoop,kant]+2*(p[0,knoop,kernel])]= 1+ np.mod(knoop+1,2)
     
     return cost, edges
-
+#end
 
 
 def optim_hp(e,c):
+    #optimizitation of the curve, of the connections of the segments
+    #parameters: 
+        #e: edges matrix
+        #c: cost value from the contruct_hp
+    #outputs:
+        #edges: optimized edges matrix
+    
     n = e.shape[0]
     edges = e
     change = 0
@@ -406,10 +464,11 @@ def optim_hp(e,c):
     #end while((a1 < n) or (change))
     
     return edges
-
+#end
 
 def  hp_connected(uu, i, j):
     #uu = edges
+    #verify if 2 vertices are connected
     
     if i == j:
         con = 1
@@ -433,9 +492,20 @@ def  hp_connected(uu, i, j):
         if i==j:
             con = 1
             return con
-
+#end
 
 def map_to_arcl(edges, vertices, x):
+    #Function to mapping the curve and get the euclidean distances,
+    #associating the data for the segment with less distance
+    #parameters:
+        #edges: edges for the principal curve (obtained by Kseg.edges)
+        #vertices: vertices for the principal curve (obtained by Kseg.vertices)
+        #x: input data
+    #outputs:
+        #y: auxiliar data
+        #d: euclidean distances between data and curve
+    #WARNING: always pass the copy of the edges and vertices to avoid modifications on the main variable.
+    
     n = x.shape[0]
     D = x.shape[1]
     segments = np.zeros((D, 2, (edges.shape[0] -1)))
@@ -484,55 +554,83 @@ def map_to_arcl(edges, vertices, x):
         y[i,0] = y[i,0] + lengths[vr[i]]
     
     return y,d
-##
+#end
 
-def plot_curve(e, v, ax):
+def plot_curve(e, v, ax, ws, wi, Cs, Ci, marker_, name_s, name_i):
+    #External Function for plot the Principal Curve
+    #parameters:
+        #e: edges for the principal curve (obtained by Kseg.edges)
+        #v: vertices for the principal curve (obtained by Kseg.vertices)
+        #ax: object from matplotlib.pyplot.subplots for ploting
+        #ws: line width for the segments 
+        #wi: line width fot the segmets interconnections
+        #Cs: color of the segments
+        #Ci: color of the interconnections
+        #marker_: plot marker for the curve (from matplotlib.pyplot.plot)
+        #name_s: label for the segment
+        #name_i: label for the interconnection
+    #outputs:
+        #plot of the Principal Curve
     
-    ws = 5; Cs = 'k'
-    wi = 2; Ci = 'k'
+    
+    # Cs = 'k'; Ci = 'k'
+    # ws = 5; wi = 2
 
     key_s = True
     key_i = True
-
 
     for i in range(1, e.shape[0]):
         j = np.where(e[:,i] == 2)[0]
         if j.shape[0] != 0:
             j = j[0]
             if(key_s):
-                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = ws, color = Cs, label = 'PC segment')
+                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]],  color = Cs, marker = marker_, label = name_s)
                 key_s = False
             else:
-                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = ws, color = Cs)
+                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]],  color = Cs, marker = marker_)
         ##
         j = np.where(e[:,i] == 1)[0]
         if j.shape[0] != 0:
             j = j[0]
             if(key_i):
-                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = wi, color = Ci, label = 'segment connection')
+                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]],  color = Ci, marker = marker_, label = name_i)
                 key_i = False
             else: 
-                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = wi, color = Ci)
-            ##
-        ##
-    ##
-##
-
+                ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]],  color = Ci, marker = marker_)
+#end
 
 
 
 class Kseg:
-    def __init__(self, k_max: int, alfa: float, lamda: float, buffer: int):
-        self.k_max = k_max
-        self.alfa  = alfa
-        self.lamda = lamda
+    def __init__(self, k_max: int, alfa: float, lamda: float, close: bool, buffer: int, f: float):
+        #Class of extraction Principal Curve through the K-segments Algorithm
+        #parameters: 
+            #k_max: number of max segments (int)
+            #alfa: parameter of control the length of cuve (float: [0,1])
+            #lamda: control the softness of the curve  (float: [0,1])
+            #buffer: batch size (for less memory consumption) (int)
+            #closed_curve: indicates if the curve is open or closed (boolean: True- closed curve; False: open curve)
+            #f: segment length (default 1.5)
+        #outputs: 
+            #Class constructed
+        
+        self.k_max  = k_max
+        self.alfa   = alfa
+        self.lamda  = lamda
         self.buffer = buffer
-    #
+        self.close  = close
+        self.f      = f
+    #end
     
    
     def fitCurve(self, X):
+        #Function for fit the Principal Curve
+        #parameters:
+            #X: input data
+        #outputs:
+            #Constructed curve with their parameters
         
-        f = 0.5
+        f = copy(self.f)
         
         eps = 2**(-52)
         
@@ -565,7 +663,7 @@ class Kseg:
         vr = np.ones((X.shape[0], self.k_max))
         dr = np.zeros((self.k_max,1))
         
-        cost, edges = construct_hp(lines[:,:,0:k],self.lamda)
+        cost, edges = construct_hp(lines[:,:,0:k], self.lamda)
         edges = optim_hp(copy(edges), cost)
         
         fim = edges.shape[0]
@@ -682,57 +780,164 @@ class Kseg:
         self.edges = edges
         self.vertices = vertices
         # print('pronto !')
+        
+        if self.close:
+            con = []
+            for k in range(self.edges.shape[1]):
+                u = np.where(self.edges[:,k] == 1)
+                if len(u[0]) == 0:
+                    con.append(k)
+                #
+            #
+            self.edges[con[0], con[1]] = 1
+            self.edges[con[1], con[0]] = 1
+        #
+        
         return self
-    ##
+    #end
     
+    def map_to_arcl(self, x):
+        #Function to mapping the curve and get the euclidean distances,
+        #associating the data for the segment with less distance
+        #parameters:
+            #edges: edges for the principal curve (obtained by Kseg.edges)
+            #vertices: vertices for the principal curve (obtained by Kseg.vertices)
+            #x: input data
+        #outputs:
+            #y: auxiliar data
+            #d: euclidean distances between data and curve
+        #WARNING: always pass the copy of the edges and vertices to avoid modifications on the main variable.
+        
+        edges = copy(self.edges)
+        vertices = copy(self.vertices)
+        
+        n = x.shape[0]
+        D = x.shape[1]
+        segments = np.zeros((D, 2, (edges.shape[0] -1)))
+        e = edges
+        segment = 0
+        lengths = np.zeros(((segments.shape[2]+1), 1))
+        i = np.where((np.sum(e, axis=0)) ==2);
+        i = i[0][0]
+        j = np.where((e[i,:]) > 0)
+        j = j[0][0]
+        
+        while segment < (segments.shape[2]):
+            e[i,j] = 0
+            e[j,i] = 0
+            a  = vertices[:,i]
+            b  = vertices[:,j]
+            a = np.reshape(a,(len(a),1))  
+            b = np.reshape(b,(len(b),1))
+            c = np.concatenate((a,b),axis=1)
+            segments[:,:,segment] = c
+            del a,b,c
+            lengths[segment + 1] = lengths[segment] + np.linalg.norm(vertices[:,i] - vertices[:,j])
+            segment = segment+1
+            i = j
+            j = np.where((e[i,:])>0)
+            if segment < segments.shape[2]:
+                j = j[0][0]
+        
+        y = np.zeros((n, D+1))
+        #msqd = 0
+        dists = np.zeros((n, segments.shape[2]))
+        rest = np.zeros((n, D+1, segments.shape[2]))
+       
+        for i in range(segments.shape[2]):
+            d,t,p = seg_dist(segments[:,0,i], segments[:,1,i], x.T)
+            dists[:,i] = d
+            a = np.concatenate((p,t), axis=1)
+            rest[:,:,i] = a
+            del a
+        
+        d = np.min(dists, axis=1)
+        vr = np.argmin(dists, axis = 1)        
+        
+        for i in range(n):
+            y[i,:] = rest[i,:,vr[i]]
+            y[i,0] = y[i,0] + lengths[vr[i]]
+        
+        return y,d
+    #end
     
-    def plot_curve(self, ax):
+    def plot_curve(self, ax, ws, wi, Cs, Ci, marker_, name_s, name_i):
+        #Internal Function for plot the Principal Curve
+        #parameters:
+            #e: edges for the principal curve (obtained by Kseg.edges)
+            #v: vertices for the principal curve (obtained by Kseg.vertices)
+            #ax: object from matplotlib.pyplot.subplots for ploting
+            #ws: line width for the segments 
+            #wi: line width fot the segmets interconnections
+            #Cs: color of the segments
+            #Ci: color of the interconnections
+            #marker_: plot marker for the curve (from matplotlib.pyplot.plot)
+            #name_s: label for the segment
+            #name_i: label for the interconnection
+        #outputs:
+            #plot of the Principal Curve
+        
         e = copy(self.edges)
         v = copy(self.vertices)
-        
-        ws = 5; Cs = 'k'
-        wi = 2; Ci = 'k'
 
         key_s = True
         key_i = True
-
 
         for i in range(1, e.shape[0]):
             j = np.where(e[:,i] == 2)[0]
             if j.shape[0] != 0:
                 j = j[0]
                 if(key_s):
-                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = ws, color = Cs, label = 'PC segment')
+                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = ws, color = Cs, marker = marker_, label = name_s)
                     key_s = False
                 else:
-                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = ws, color = Cs)
+                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = ws, color = Cs, marker = marker_)
             ##
             j = np.where(e[:,i] == 1)[0]
             if j.shape[0] != 0:
                 j = j[0]
                 if(key_i):
-                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = wi, color = Ci, label = 'segment connection')
+                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]],  linewidth = wi, color = Ci, marker = marker_, label = name_i)
                     key_i = False
                 else: 
-                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]], linewidth = wi, color = Ci)
-                ##
-            ##
-        ##
-    ##
-##
+                    ax.plot([v[0,i], v[0,j]], [v[1,i], v[1,j]],  linewidth = wi, color = Ci, marker = marker_)
+    #end
+    
+    
+#end
 
-
-class OneClassPC:
-    def __init__(self, k_max: int, alfa: float, lamda: float, outlier_rate: float, buffer: int):
+class OneClassPC:   
+    
+    def __init__(self, k_max: int, alfa: float, lamda: float, buffer: int, closed_curve: bool, f: float, 
+                 outlier_rate: float):    
+        #Constructor of the OneClass PC Classifier 
+        #parameters: 
+            #k_max: number of max segments (int)
+            #alfa: parameter of control the length of cuve (float: [0,1])
+            #lamda: control the softness of the curve  (float: [0,1])
+            #buffer: batch size (for less memory consumption) (int)
+            #closed_curve: indicates if the curve is open or closed (boolean: True- closed curve; False: open curve)
+            #f: segment length (default 1.5)
+            #outlier rate: parameter of control quantity of outliers in the data (float: [0,1]| 0: no outliers | 1:full of outliers)
+        #outputs: 
+            #Class constructed
+        
         self.k_max = k_max
         self.alfa  = alfa
         self.lamda = lamda
-        self.outlier_rate = outlier_rate
         self.buffer = buffer
-    ##
+        self.closed_curve = closed_curve
+        self.f = f
+        self.outlier_rate = outlier_rate
+    #end
     
     def fit(self, X):
-        curve = Kseg(self.k_max, self.alfa, self.lamda, self.buffer).fitCurve(X)
+        #Function for training the classifier
+        #parameters:
+            #X input train data
+        #outputs:
+            #trained model
+        curve = Kseg(self.k_max, self.alfa, self.lamda, self.closed_curve, self.buffer, self.f).fitCurve(X)
         y,d = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
         d = np.sort(d)[::-1]
         n = len(d)
@@ -757,9 +962,14 @@ class OneClassPC:
         self.limiar = limiar
         self.segments = segments
         return self
-    ##
+    #end
     
     def predict(self, X):
+        #Predidct function for the Multi-class PC, using a imput data
+        #parameters: 
+            # X: imput data
+        #outputs: 
+            # y: predicted target value (Class)
        
         uu,d = map_to_arcl(copy(self.curve.edges), copy(self.curve.vertices), X)
         y = np.zeros(len(d))
@@ -771,20 +981,42 @@ class OneClassPC:
                 y[i] = -1         
         
         return y
-    ##
-##
+    #end
+#end
 
 
 class MultiClassPC:
-    def __init__(self, k_max: int, alfa: float, lamda: float, buffer: int):
+    def __init__(self, k_max: int, alfa: float, lamda: float, buffer: int,
+                 closed_curve: bool, f: float):
+        
+        #Constructor of the MultiClass PC Classifier 
+        #parameters: 
+            #k_max: number of max segments (int)
+            #alfa: parameter of control the length of cuve (float: [0,1])
+            #lamda: control the softness of the curve  (float: [0,1])
+            #buffer: batch size (for less memory consumption) (int)
+            #closed_curve: indicates if the curve is open or closed (boolean: True- closed curve; False: open curve)
+            #f: segment length (default 1.5)
+        #outputs: 
+            #Class constructed
+        
         self.k_max = k_max
         self.alfa  = alfa
         self.lamda = lamda
         self.buffer = buffer
-    ##
+        self.closed_curve = closed_curve
+        self.f = f
+    #end
 
 
     def fit(self, X, Y):
+        #Function for training the classifier
+        #parameters:
+            #X input train data
+            #Y output train data
+        #outputs:
+            #trained model
+        
         uu = Y.shape
         if len(uu) == 1:
             nclasses = len(np.unique(Y))
@@ -794,7 +1026,8 @@ class MultiClassPC:
             
             for j in range(nclasses):                
                 x = X[Y == class_values[j]]                
-                curve = Kseg(self.k_max, self.alfa, self.lamda, self.buffer).fitCurve(x)
+                curve = Kseg(self.k_max, self.alfa, self.lamda, 
+                             self.closed_curve, self.buffer, self.f).fitCurve(x)
                 # e_nome = e_nome + str(j)
                 # v_nome = v_nome + str(j)
                 # parametros[e_nome] = e
@@ -839,10 +1072,14 @@ class MultiClassPC:
             self.nclasses = nclasses
             self.curves = curves
             return self
-    ##
+    #end
     
     def predict(self, X):
-
+        #Predidct function for the Multi-class PC, using a imput data
+        #parameters: 
+            # X: imput data
+        #outputs: 
+            # y: predicted target value (Class)
         
         if self.type_ == '1d':
             d = np.zeros((X.shape[0], self.nclasses))
@@ -876,7 +1113,7 @@ class MultiClassPC:
             #end predict
             
             return y
-        ##
+    #end
     
     def score(self, y, yp):
         #calculo da taxa de acerto do classificador
@@ -884,7 +1121,14 @@ class MultiClassPC:
         # yp = valor predito pelo modelo
         # acc = taxa de acerto referente à cada classe
         
-        acc = np.zeros(y.shape[1])
+        #accuracy rate calculus for the classifier 
+        #parameters: 
+            # y:  real target value
+            # yp: predicted target value
+        #outputs: 
+            # acc: accuracy score
+        
+        acc = np.zeros(y.shape[0])
         
         N = np.zeros(y.shape[1]) #número de amostras por cada classe
         for i in range(y.shape[1]):
@@ -903,9 +1147,16 @@ class MultiClassPC:
         #end
         acc = np.sum(acc)/np.sum(N)
         return np.mean(acc)
-    ##
+    #end
     
     def predict_proba(self, X):
+        # Prediction of the probabilities of each sample (event) to belong each class
+        # parameters:
+            # X: the input vectors (n_samples, n_features)
+        #output: 
+            # probas: vector containing the probabilities for each class in format (n_samples, n_classes)
+        
+        
         d = np.zeros((X.shape[0], self.nclasses))
         probas = np.zeros((X.shape[0], self.nclasses))
         
@@ -927,5 +1178,5 @@ class MultiClassPC:
         #end predict
         
         return probas
-        
-##
+    #end       
+#end
