@@ -1,6 +1,10 @@
 Metadata-Version: 2.1
 Name: ocpc_py
+<<<<<<< HEAD
 Version: 0.1.4
+=======
+Version: 0.1.3
+>>>>>>> a3593666f52218c9861eff9e4f38f045f9566fa0
 Summary: One Class Classifier based on Principal Curves in Python
 Home-page: https://github.com/fmborges2/PC_Classifier/
 Author: Fernando Elias de Melo Borges
