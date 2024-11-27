@@ -11,7 +11,7 @@ import numpy.matlib
 import numpy.linalg as la
 from copy import copy
 import matplotlib.pyplot as plt
-from utils import *
+from .utils import *
 
 
 class Kseg:

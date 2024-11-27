@@ -4,7 +4,7 @@ with open("README.md", "r") as arq:
     readme = arq.read()
 
 setup(name='ocpc_py',
-    version='0.1.7',
+    version='0.2.0',
     license='MIT License',
     author='Fernando Elias de Melo Borges', 
     long_description=readme,
