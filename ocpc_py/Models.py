@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Aug 22 16:10:04 2019
+Created on Fri Feb 21 21:35:48 2025
 
-@author: Fernando Elias
+@author: ferna
 """
 
 #Função k-seg
@@ -11,7 +11,7 @@ import numpy.matlib
 import numpy.linalg as la
 from copy import copy
 import matplotlib.pyplot as plt
-from .utils import *
+from utils import *
 
 
 class Kseg:
@@ -47,6 +47,12 @@ class Kseg:
             Constructed curve with their parameters
         """
         
+        close_fit = False 
+        
+        if self.close == True:
+            close_fit = True 
+            self.close = False
+        
         f = copy(self.f)
         
         eps = 2**(-52)
@@ -80,16 +86,16 @@ class Kseg:
         vr = np.ones((X.shape[0], self.k_max))
         dr = np.zeros((self.k_max,1))
         
-        cost, edges = construct_hp(lines[:,:,0:k], self.lamda)
-        edges = optim_hp(copy(edges), cost)
+        cost, self.edges = construct_hp(lines[:,:,0:k], self.lamda)
+        self.edges = optim_hp(copy(self.edges), cost)
         
-        fim = edges.shape[0]
-        edges = np.delete(edges, np.s_[fim-1:fim], axis= 0)
-        fim = edges.shape[1]
-        edges = np.delete(edges, np.s_[fim-1:fim], axis= 1)
+        fim = self.edges.shape[0]
+        self.edges = np.delete(self.edges, np.s_[fim-1:fim], axis= 0)
+        fim = self.edges.shape[1]
+        self.edges = np.delete(self.edges, np.s_[fim-1:fim], axis= 1)
         
-        vertices = np.reshape(lines[:,:,0:k], (X.shape[1], 2*k), order='F')
-        y, sqd = map_to_arcl(copy(edges), copy(vertices), X)
+        self.vertices = np.reshape(lines[:,:,0:k], (X.shape[1], 2*k), order='F')
+        y, sqd = map_to_arcl(self, X)
         
         # of = np.array([np.mean(sqd), np.log(np.max(y[:,0]))])
         
@@ -181,24 +187,24 @@ class Kseg:
                     change = 0    
             #update -> end while(change)
             
-            cost, edges = construct_hp(lines[:,:,0:k],self.lamda)
-            edges = optim_hp(copy(edges), cost)
+            cost, self.edges = construct_hp(lines[:,:,0:k],self.lamda)
+            self.edges = optim_hp(copy(self.edges), cost)
         
-            fim = edges.shape[0]
-            edges = np.delete(edges, np.s_[fim-1:fim], axis= 0)
-            fim = edges.shape[1]
-            edges = np.delete(edges, np.s_[fim-1:fim], axis= 1)
+            fim = self.edges.shape[0]
+            self.edges = np.delete(self.edges, np.s_[fim-1:fim], axis= 0)
+            fim = self.edges.shape[1]
+            self.edges = np.delete(self.edges, np.s_[fim-1:fim], axis= 1)
             
-            vertices = np.reshape(lines[:,:,0:k], (X.shape[1], 2*k), order='F')
-            y, sqd = map_to_arcl(copy(edges), copy(vertices), X)
+            self.vertices = np.reshape(lines[:,:,0:k], (X.shape[1], 2*k), order='F')
+            y, sqd = map_to_arcl(self, X)
             #of = np.append(of, [np.mean(sqd), np.log(np.max(y[:,0]))], axis = 1)
         #end while (k < self.k_max)
         
-        self.edges = edges
-        self.vertices = vertices
+        # self.edges = edges
+        # self.vertices = vertices
         # print('pronto !')
         
-        if self.close:
+        if close_fit:
             con = []
             for k in range(self.edges.shape[1]):
                 u = np.where(self.edges[:,k] == 1)
@@ -206,8 +212,11 @@ class Kseg:
                     con.append(k)
                 #
             #
+            self.start_curve = con[0]
+            self.end_curve = con[1]
             self.edges[con[0], con[1]] = 1
             self.edges[con[1], con[0]] = 1
+            self.close = close_fit
         #
         
         return self
@@ -234,10 +243,16 @@ class Kseg:
         e = edges
         segment = 0
         lengths = np.zeros(((segments.shape[2]+1), 1))
-        i = np.where((np.sum(e, axis=0)) ==2);
-        i = i[0][0]
-        j = np.where((e[i,:]) > 0)
-        j = j[0][0]
+        
+        if self.close == False:     
+            i = np.where((np.sum(e, axis=0)) ==2);
+            i = i[0][0]
+            j = np.where((e[i,:]) > 0)
+            j = j[0][0]    
+        else:
+            i = self.start_curve
+            j = self.end_curve
+                
         
         while segment < (segments.shape[2]):
             e[i,j] = 0
@@ -369,7 +384,7 @@ class OneClassPC:
         """
         
         curve = Kseg(self.k_max, self.alfa, self.lamda, self.close, self.buffer, self.f).fitCurve(X)
-        y,d = map_to_arcl(copy(curve.edges), copy(curve.vertices), X)
+        y,d = map_to_arcl(curve, X)
         d = np.sort(d)[::-1]
         n = len(d)
         

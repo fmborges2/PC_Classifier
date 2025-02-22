@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Nov 26 20:02:35 2024
+Created on Fri Feb 21 21:36:21 2025
 
-@author: Fernando Elias
+@author: ferna
 """
 
 import numpy as np
@@ -508,17 +508,20 @@ def  hp_connected(uu, i, j):
             return con
 #end
 
-def map_to_arcl(edges, vertices, x):
-    #Function to mapping the curve and get the euclidean distances,
-    #associating the data for the segment with less distance
-    #parameters:
-        #edges: edges for the principal curve (obtained by Kseg.edges)
-        #vertices: vertices for the principal curve (obtained by Kseg.vertices)
-        #x: input data
-    #outputs:
-        #y: auxiliar data
-        #d: euclidean distances between data and curve
-    #WARNING: always pass the copy of the edges and vertices to avoid modifications on the main variable.
+def map_to_arcl(curve, x):
+    """
+    Function to mapping the curve and get the euclidean distances,
+    associating the data for the segment with less distance
+    parameters:
+        edges: edges for the principal curve (obtained by Kseg.edges)
+        vertices: vertices for the principal curve (obtained by Kseg.vertices)
+        x: input data
+    outputs:
+        y: auxiliar data
+        d: euclidean distances between data and curve
+    """
+    edges = copy(curve.edges)
+    vertices = copy(curve.vertices)
     
     n = x.shape[0]
     D = x.shape[1]
@@ -526,10 +529,16 @@ def map_to_arcl(edges, vertices, x):
     e = edges
     segment = 0
     lengths = np.zeros(((segments.shape[2]+1), 1))
-    i = np.where((np.sum(e, axis=0)) ==2);
-    i = i[0][0]
-    j = np.where((e[i,:]) > 0)
-    j = j[0][0]
+    
+    if curve.close == False:     
+        i = np.where((np.sum(e, axis=0)) ==2);
+        i = i[0][0]
+        j = np.where((e[i,:]) > 0)
+        j = j[0][0]    
+    else:
+        i = curve.start_curve
+        j = curve.end_curve
+            
     
     while segment < (segments.shape[2]):
         e[i,j] = 0
